@@ -38,8 +38,9 @@ def get_state_set(lines):
 def grade(start_set, final_set, transfers, inputs):
     if len(start_set) != 1:
         return '开始状态不唯一'
-    curr = start_set[0]
+
     for sentence in inputs:
+        curr = start_set[0]
         for word in sentence:
             if curr == 'N':
                 return '错误，自动机卡住，当前状态为'+curr+'输入字符'+word+'\n所在句子为：'+sentence
@@ -49,7 +50,7 @@ def grade(start_set, final_set, transfers, inputs):
                 curr = transfers[curr][1]
             else:
                 return '错误，读入的字符串中包含非0非1的字符：'+word
-        # print(curr)
+
         if curr not in final_set:
             return '错误，字符串读完，未停止在终止状态，当前状态为:'+curr+'\n所在句子为：'+sentence
 
@@ -63,7 +64,7 @@ def mini(num, states_len):
 def add_parameters():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--ans_file', type=str, default='ans.txt')
-    parser.add_argument('-s', '--sentences_file', type=str, default='sentences_2.txt')
+    parser.add_argument('-s', '--sentences_file', type=str, default='sentences.txt')
     return parser.parse_args()
 
 
