@@ -63,7 +63,7 @@ def mini(num, states_len):
 def add_parameters():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--ans_file', type=str, default='ans.txt')
-    parser.add_argument('-s', '--sentences_file', type=str, default='sentences.txt')
+    parser.add_argument('-s', '--sentences_file', type=str, default='sentences_2.txt')
     return parser.parse_args()
 
 
