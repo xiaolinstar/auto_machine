@@ -5,7 +5,7 @@ def get_data_from_file(file_name):
     try:
         with open(file_name, encoding='utf-8') as f:
             lines = f.readlines()
-            return [line[:-1] for line in lines[1:]]
+            return lines[0], [line[:-1] for line in lines[1:]]
     except IOError as e:
         print('读取文件异常', e)
 
@@ -52,13 +52,18 @@ def grade(start_set, final_set, transfers, inputs):
         # print(curr)
         if curr not in final_set:
             return '错误，字符串读完，未停止在终止状态，当前状态为:'+curr+'\n所在句子为：'+sentence
-    return '成功'
+
+    return '所有句子成功接收，祝贺！'
+
+
+def mini(num, states_len):
+    return num == states_len
 
 
 def add_parameters():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ans_file', type=str, default='ans.txt')
-    parser.add_argument('--sentences_file', type=str, default='sentences.txt')
+    parser.add_argument('-a', '--ans_file', type=str, default='ans.txt')
+    parser.add_argument('-s', '--sentences_file', type=str, default='sentences.txt')
     return parser.parse_args()
 
 
@@ -66,8 +71,14 @@ if __name__ == '__main__':
     args = add_parameters()
     ans_file = args.ans_file
     sentences_file = args.sentences_file
-    contents = get_data_from_file(ans_file)
-    sentences = get_data_from_file(sentences_file)
+    _, contents = get_data_from_file(ans_file)
+    states_num, sentences = get_data_from_file(sentences_file)
+    states_num = int(states_num[:-1])
+
     S, F, table = get_state_set(contents)
     ans = grade(S, F, table, sentences)
     print(ans)
+    if mini(states_num, len(contents)):
+        print('√该自动机是极小的')
+    else:
+        print('×自动机的状态不是极小的')
