@@ -47,7 +47,7 @@ def grade(start_set, final_set, transfers, inputs):
         curr = start_set[0]
         for word in sentence:
             if curr == 'N':
-                res.append('错误，自动机卡住，当前状态为' + curr + '输入字符' + word + '\n所在句子为：' + sentence)
+                res.append('不接收，自动机卡住，当前状态为' + curr + '输入字符' + word + '\n所在句子为：' + sentence)
                 f.append(False)
                 break
             if word == '0':
@@ -55,12 +55,12 @@ def grade(start_set, final_set, transfers, inputs):
             elif word == '1':
                 curr = transfers[curr][1]
             else:
-                res.append('错误，读入的字符串中包含非0非1的字符：' + word)
+                res.append('不接收，读入的字符串中包含非0非1的字符：' + word)
                 f.append(False)
                 break
 
         if curr not in final_set:
-            res.append('错误，字符串读完，未停止在终止状态，当前状态为:' + curr + '\n所在句子为：' + sentence)
+            res.append('不接收，字符串读完，未停止在终止状态，当前状态为:' + curr + ' 所在句子为：' + sentence)
             f.append(False)
         else:
             res.append('句子{}成功接收！'.format(sentence))
@@ -76,7 +76,8 @@ def add_parameters():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--ans_file', type=str, default='ans.txt')
     parser.add_argument('-s', '--sentences_file', type=str, default='sentences.txt')
-    parser.add_argument('-d', "--debug", type=str, default=True)
+    parser.add_argument('-d', '--debug', type=bool, default=False)
+    parser.add_argument('-e', '--eval', type=bool, default=True)
     return parser.parse_args()
 
 
@@ -107,12 +108,15 @@ if __name__ == '__main__':
 
     S, F, table = get_state_set(contents)
     ans, f_ans = grade(S, F, table, sentences)
+
     if args.debug:
         print_results(ans)
 
-    #  评分系统
-    # scores, error_info = grade_scores(f_ans)
-    print('End!')
+    # 评分系统
+    if args.eval:
+        print(f_ans)
+        # scores, error_info = grade_scores(f_ans)
+    # print('End!')
     # if mini(states_num, len(contents)):
     #     print('√该自动机是极小的')
     # else:
