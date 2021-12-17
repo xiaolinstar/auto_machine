@@ -38,23 +38,26 @@ def get_state_set(lines):
 def grade(start_set, final_set, transfers, inputs):
     if len(start_set) != 1:
         return '开始状态不唯一'
-
+    res = list()
     for sentence in inputs:
         curr = start_set[0]
         for word in sentence:
             if curr == 'N':
-                return '错误，自动机卡住，当前状态为'+curr+'输入字符'+word+'\n所在句子为：'+sentence
+                res.append('错误，自动机卡住，当前状态为'+curr+'输入字符'+word+'\n所在句子为：'+sentence)
+                break
             if word == '0':
                 curr = transfers[curr][0]
             elif word == '1':
                 curr = transfers[curr][1]
             else:
-                return '错误，读入的字符串中包含非0非1的字符：'+word
+                res.append('错误，读入的字符串中包含非0非1的字符：'+word)
+                break
 
         if curr not in final_set:
-            return '错误，字符串读完，未停止在终止状态，当前状态为:'+curr+'\n所在句子为：'+sentence
-
-    return '所有句子成功接收，祝贺！'
+            res.append('错误，字符串读完，未停止在终止状态，当前状态为:'+curr+'\n所在句子为：'+sentence)
+        else:
+            res.append('句子{}成功接收！'.format(sentence))
+    return res
 
 
 def mini(num, states_len):
@@ -65,7 +68,13 @@ def add_parameters():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--ans_file', type=str, default='ans.txt')
     parser.add_argument('-s', '--sentences_file', type=str, default='sentences.txt')
+    parser.add_argument('-d', "--debug", type=str, default=False)
     return parser.parse_args()
+
+
+def print_results(res):
+    for item in ans:
+        print(item)
 
 
 if __name__ == '__main__':
@@ -78,7 +87,10 @@ if __name__ == '__main__':
 
     S, F, table = get_state_set(contents)
     ans = grade(S, F, table, sentences)
-    print(ans)
+
+    if args.debug:
+        print_results(ans)
+
     if mini(states_num, len(contents)):
         print('√该自动机是极小的')
     else:
