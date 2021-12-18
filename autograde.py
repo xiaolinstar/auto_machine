@@ -82,7 +82,7 @@ def add_parameters():
 
 
 def print_results(res):
-    for item in ans:
+    for item in res:
         print(item)
 
 
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
     S, F, table = get_state_set(contents)
     ans, f_ans = grade(S, F, table, sentences)
-
+    print(args.__dict__)
     if args.debug:
         print_results(ans)
 
