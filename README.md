@@ -4,6 +4,7 @@
 
 - 非完闭检查，给定多组测试数据（正则表达式可以接收句子），如果都可以接收，则判断该DFA是正确的。
 - 因为极小DFA是唯一的，对于“极小”的检查，我们只检查状态的数量。
+- 给定句子，判断是否可以接收，即是否符合该正则表达式。
 
 **本程序需要安装python3.x，如何安装请自行搜索。**
 
@@ -21,16 +22,31 @@
 python autograde.py
 ```
 
-*所有句子成功接收，祝贺！*
+*[True, True, True, True, False]*
 
-*√该自动机是极小的*
+上式内容，表示给定的5个句子中，前4个句子可被正则表达式接收，最后一个句子不能被接收。
+
+
+
+```
+python autograde.py --debug=True
+```
+
+*句子1100成功接收！*
+*句子100011010000000成功接收！*
+*句子000010000011010成功接收！*
+*句子1110100010000100000100000000010成功接收！*
+*不接收，字符串读完，未停止在终止状态，当前状态为:q2 所在句子为：101011111*
+*[True, True, True, True, False]*
 
 ### 自定义参数
 
-本程序有两个参数：ans_file，sentences_file，默认情况下两个参数的值为：
+本程序有4个参数：ans_file，sentences_file，debug，eval，默认情况下参数的值为：
 
 - ans_file="ans.txt"
 - sentences_file="sentences.txt"
+- debug=False
+- eval=True
 
 你可以更改文件名，方便你的使用。例如你的文件结构为
 
@@ -65,6 +81,4 @@ python autograde.py -a="output.txt" -s="test.txt"
 文件夹内存放我们检查的数据，命名格式为：
 
 re_1.txt，ans_1.txt, sentences_1.txt
-
-**欢迎大家积极为我们的程序提供更多的测试数据**
 
