@@ -1,14 +1,22 @@
 import argparse
 
+"""
+作者：邢小林
+author: xlxing
+"""
+
 
 def get_data_from_file(file_name):
+    """读取文件，第一行内容忽略"""
     try:
         with open(file_name, encoding='utf-8') as f:
             lines = f.readlines()
+            """删除多余的空行"""
             while lines[-1] == '\n':
                 lines = lines[:-1]
+            """文件末尾补充换行符"""
             if lines[-1][-1] != '\n':
-                lines[-1][-1] += '\n'
+                lines[-1] += '\n'
             return lines[0], [line[:-1] for line in lines[1:]]
     except IOError as e:
         print('读取文件异常', e)
@@ -59,6 +67,8 @@ def grade(start_set, final_set, transfers, inputs):
                 f.append(False)
                 break
 
+        if curr == 'N':
+            continue
         if curr not in final_set:
             res.append('不接收，字符串读完，未停止在终止状态，当前状态为:' + curr + ' 所在句子为：' + sentence)
             f.append(False)
@@ -76,8 +86,8 @@ def add_parameters():
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--ans_file', type=str, default='ans.txt')
     parser.add_argument('-s', '--sentences_file', type=str, default='sentences.txt')
-    parser.add_argument('-d', '--debug', type=bool, default=False)
-    parser.add_argument('-e', '--eval', type=bool, default=True)
+    parser.add_argument('-d', '--debug', type=bool, default=True)
+    # parser.add_argument('-e', '--eval', type=bool, default=True)
     return parser.parse_args()
 
 
@@ -86,37 +96,23 @@ def print_results(res):
         print(item)
 
 
-def grade_scores(f):
-    standard = [True] * 10 + [False] * 10
-    score = 0
-    fail_info = list()
-    for i in range(20):
-        if f[i] == standard[i]:
-            score += 1
-        else:
-            fail_info.append(i)
-    return score, fail_info
-
-
 if __name__ == '__main__':
     args = add_parameters()
     ans_file = args.ans_file
     sentences_file = args.sentences_file
+
     _, contents = get_data_from_file(ans_file)
     states_num, sentences = get_data_from_file(sentences_file)
     states_num = int(states_num[:-1])
 
     S, F, table = get_state_set(contents)
-    ans, f_ans = grade(S, F, table, sentences)
-    if args.debug:
-        print_results(ans)
 
-    # 评分系统
-    if args.eval:
-        print(f_ans)
-        # scores, error_info = grade_scores(f_ans)
-    # print('End!')
-    # if mini(states_num, len(contents)):
-    #     print('√该自动机是极小的')
-    # else:
-    #     print('×自动机的状态不是极小的')
+    debug_ans, f_ans = grade(S, F, table, sentences)
+
+    if mini(states_num, len(contents)):
+        print('√该自动机是极小的')
+    else:
+        print('×自动机的状态不是极小的')
+
+    if args.debug:
+        print_results(debug_ans)

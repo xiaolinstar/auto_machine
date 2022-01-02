@@ -19,7 +19,7 @@
 进入文件夹auto_machine，打开终端，执行下面的程序：
 
 ```shell
-python autograde.py
+python judge.py
 ```
 
 *[True, True, True, True, False]*
@@ -61,13 +61,13 @@ python autograde.py --debug=True
 你可以使用如下命令进行测试：
 
 ```shell
-python autograde.py --ans_file="output.txt" --sentences_file="test.txt"
+python judge.py --ans_file="output.txt" --sentences_file="test.txt"
 ```
 
 当然也支持了简写的形式：
 
 ```shell
-python autograde.py -a="output.txt" -s="test.txt"
+python judge.py -a="output.txt" -s="test.txt"
 ```
 
 ### 数据
